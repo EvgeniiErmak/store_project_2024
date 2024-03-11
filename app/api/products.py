@@ -1,10 +1,9 @@
-# app/api/products.py
+# app/api/subcategories.py
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
-from typing import List
-
-from app import crud, schemas
 from app.database import SessionLocal
+from sqlalchemy.orm import Session
+from app import crud, schemas
+from typing import List
 
 router = APIRouter()
 
