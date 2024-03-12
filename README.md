@@ -2,38 +2,6 @@
 
 Этот проект представляет собой пример простого веб-приложения для онлайн магазина, разработанного с использованием Python, FastAPI и SQLAlchemy.
 
-## Структура проекта
-
-store_project_2024
-├── README.md
-├── alembic
-│ ├── README
-│ ├── env.py
-│ ├── script.py.mako
-│ └── versions
-├── app
-│ ├── init.py
-│ ├── api
-│ │ ├── init.py
-│ │ ├── cart.py
-│ │ ├── categories.py
-│ │ ├── products.py
-│ │ └── subcategories.py
-│ ├── auth.py
-│ ├── crud.py
-│ ├── database.py
-│ ├── models.py
-│ └── schemas.py
-├── main.py
-├── poetry.lock
-├── project_structure.txt
-├── pyproject.toml
-└── tests
-├── init.py
-├── test_cart.py
-├── test_categories.py
-└── test_products.py
-
 
 ## Описание файлов и каталогов
 
