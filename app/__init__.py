@@ -10,3 +10,7 @@ def create_app():
     app.include_router(products.router)
     app.include_router(subcategories.router)
     return app
+
+
+def app():
+    return
