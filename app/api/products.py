@@ -1,14 +1,13 @@
-# app/api/subcategories.py
+# app/api/products.py
 from fastapi import APIRouter, Depends, HTTPException
-from app.database import SessionLocal
 from sqlalchemy.orm import Session
-from app import crud, schemas
 from typing import List
+from app.database import SessionLocal
+from app import schemas, crud
 
 router = APIRouter()
 
 
-# Dependency
 def get_db():
     db = SessionLocal()
     try:
@@ -17,30 +16,30 @@ def get_db():
         db.close()
 
 
-@router.post("/subcategories/", response_model=schemas.Subcategory)
-def create_subcategory(subcategory: schemas.SubcategoryCreate, db: Session = Depends(get_db)):
-    return crud.create_subcategory(db=db, subcategory=subcategory)
+@router.post("/products/", response_model=schemas.Product)
+def create_product(product: schemas.ProductCreate, db: Session = Depends(get_db)):
+    return crud.create_product(db=db, product=product)
 
 
-@router.get("/subcategories/", response_model=List[schemas.Subcategory])
-def read_subcategories(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    subcategories = crud.get_subcategories(db=db, skip=skip, limit=limit)
-    return subcategories
+@router.get("/products/", response_model=List[schemas.Product])
+def read_products(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    products = crud.get_products(db=db, skip=skip, limit=limit)
+    return products
 
 
-@router.get("/subcategories/{subcategory_id}", response_model=schemas.Subcategory)
-def read_subcategory(subcategory_id: int, db: Session = Depends(get_db)):
-    subcategory = crud.get_subcategory(db=db, subcategory_id=subcategory_id)
-    if subcategory is None:
-        raise HTTPException(status_code=404, detail="Subcategory not found")
-    return subcategory
+@router.get("/products/{product_id}", response_model=schemas.Product)
+def read_product(product_id: int, db: Session = Depends(get_db)):
+    product = crud.get_product(db=db, product_id=product_id)
+    if product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return product
 
 
-@router.put("/subcategories/{subcategory_id}", response_model=schemas.Subcategory)
-def update_subcategory(subcategory_id: int, subcategory: schemas.SubcategoryUpdate, db: Session = Depends(get_db)):
-    return crud.update_subcategory(db=db, subcategory_id=subcategory_id, subcategory=subcategory)
+@router.put("/products/{product_id}", response_model=schemas.Product)
+def update_product(product_id: int, product: schemas.ProductUpdate, db: Session = Depends(get_db)):
+    return crud.update_product(db=db, product_id=product_id, product=product)
 
 
-@router.delete("/subcategories/{subcategory_id}", response_model=schemas.Subcategory)
-def delete_subcategory(subcategory_id: int, db: Session = Depends(get_db)):
-    return crud.delete_subcategory(db=db, subcategory_id=subcategory_id)
+@router.delete("/products/{product_id}", response_model=schemas.Product)
+def delete_product(product_id: int, db: Session = Depends(get_db)):
+    return crud.delete_product(db=db, product_id=product_id)

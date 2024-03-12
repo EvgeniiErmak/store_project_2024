@@ -83,13 +83,13 @@ class Subcategory(SubcategoryBase):
         from_attributes = True
 
 
-class Cart:
+class Cart(BaseModel):
     pass
 
 
-class CartUpdate:
+class CartUpdate(BaseModel):
     pass
 
 
-class CartCreate:
+class CartCreate(BaseModel):
     pass
