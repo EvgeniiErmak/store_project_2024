@@ -15,6 +15,7 @@ python-dotenv = "^1.0.1"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 pydantic = "^2.6.3"
 pyjwt = "^2.8.0"
+myapplication = "^0.1.0"
 
 
 [build-system]

@@ -2,7 +2,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
-from app import crud, models, schemas
+from app import crud, schemas
 from app.database import SessionLocal
 
 router = APIRouter()
@@ -44,7 +44,3 @@ def update_category(category_id: int, category: schemas.CategoryUpdate, db: Sess
 @router.delete("/categories/{category_id}", response_model=schemas.Category)
 def delete_category(category_id: int, db: Session = Depends(get_db)):
     return crud.delete_category(db=db, category_id=category_id)
-
-
-# Move the Product import here
-from app.models import Product
