@@ -1,6 +1,15 @@
 # app/schemas.py
-from pydantic import BaseModel
 from typing import List, Optional
+from pydantic import BaseModel
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    email: str
 
 
 class CategoryBase(BaseModel):

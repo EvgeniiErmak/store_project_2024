@@ -1,5 +1,5 @@
 # app/auth.py
-from fastapi import Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from app.database import SessionLocal
 from sqlalchemy.orm import Session
@@ -7,6 +7,8 @@ from passlib.context import CryptContext
 from app import models, schemas
 from datetime import datetime, timedelta
 import jwt
+
+router = APIRouter()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -37,10 +39,9 @@ def get_user(db: Session, email: str):
 
 def authenticate_user(db: Session, email: str, password: str):
     user = get_user(db, email)
-    if not user:
-        return False
-    if not verify_password(password, user.hashed_password):
-        return False
+    if not user or not verify_password(password, user.hashed_password):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Incorrect email or password")
     return user
 
 
@@ -56,15 +57,25 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
 
 
 def get_current_user(db: Session = Depends(SessionLocal), token: str = Depends(oauth2_scheme)):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    return authenticate_user(db, token, credentials_exception)
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail="Could not validate credentials")
+        token_data = schemas.TokenData(email=email)
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Token has expired")
+    except jwt.JWTError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail="Could not validate credentials")
+    return token_data
 
 
-def get_current_active_user(current_user: schemas.User = Depends(get_current_user)):
-    if current_user.disabled:
-        raise HTTPException(status_code=400, detail="Inactive user")
-    return current_user
+def get_current_active_user(current_user: schemas.TokenData = Depends(get_current_user)):
+    user = get_user(SessionLocal(), current_user.email)
+    if not user or user.disabled:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="Inactive user")
+    return user
