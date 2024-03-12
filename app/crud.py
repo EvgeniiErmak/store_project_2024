@@ -3,6 +3,40 @@ from sqlalchemy.orm import Session
 from app import models, schemas
 
 
+def create_cart_item(db: Session, cart_item: schemas.CartCreate):
+    db_cart_item = models.Cart(**cart_item.dict())
+    db.add(db_cart_item)
+    db.commit()
+    db.refresh(db_cart_item)
+    return db_cart_item
+
+
+def get_cart_items(db: Session, skip: int = 0, limit: int = 10):
+    return db.query(models.Cart).offset(skip).limit(limit).all()
+
+
+def get_cart_item(db: Session, cart_item_id: int):
+    return db.query(models.Cart).filter(models.Cart.id == cart_item_id).first()
+
+
+def update_cart_item(db: Session, cart_item_id: int, cart_item: schemas.CartUpdate):
+    db_cart_item = db.query(models.Cart).filter(models.Cart.id == cart_item_id).first()
+    if db_cart_item:
+        for key, value in cart_item.dict().items():
+            setattr(db_cart_item, key, value)
+        db.commit()
+        db.refresh(db_cart_item)
+    return db_cart_item
+
+
+def delete_cart_item(db: Session, cart_item_id: int):
+    db_cart_item = db.query(models.Cart).filter(models.Cart.id == cart_item_id).first()
+    if db_cart_item:
+        db.delete(db_cart_item)
+        db.commit()
+    return db_cart_item
+
+
 def create_category(db: Session, category: schemas.CategoryCreate):
     db_category = models.Category(**category.dict())
     db.add(db_category)

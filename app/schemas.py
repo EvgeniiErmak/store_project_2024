@@ -81,3 +81,15 @@ class Subcategory(SubcategoryBase):
 
     class Config:
         from_attributes = True
+
+
+class Cart:
+    pass
+
+
+class CartUpdate:
+    pass
+
+
+class CartCreate:
+    pass
