@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "store-project-2024"
+name = "store_project_2024"
 version = "0.1.0"
 description = ""
 authors = ["Евгений Ермак <144560375+EvgeniiErmak@users.noreply.github.com>"]
@@ -17,6 +17,8 @@ pydantic = "^2.6.3"
 pyjwt = "^2.8.0"
 myapplication = "^0.1.0"
 
+[tool.poetry.dev-dependencies]
+pytest = "^7.2.4"
 
 [build-system]
 requires = ["poetry-core"]

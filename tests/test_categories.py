@@ -1,8 +1,7 @@
 # tests/test_categories.py
 from fastapi.testclient import TestClient
-from app.database import engine
-from app.main import app
-from app import models
+from app import app
+
 
 client = TestClient(app)
 
