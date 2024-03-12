@@ -12,5 +12,5 @@ def create_app():
     return app
 
 
-def app():
-    return
+def app(scope, receive, send):
+    return create_app()(scope, receive, send)
